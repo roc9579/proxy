@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <script>
+        const targetUrl = 'https://raw.githubusercontent.com/watchttvv/free-proxy-list/refs/heads/main/proxy.txt'; // 你想抓的网址
+        
+        fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`)
+          .then(res => {
+            if (!res.ok) throw new Error('代理服务器响应异常');
+            return res.json();
+          })
+          .then(data => {
+            // allorigins 把 HTML 放在 data.contents 里
+            const html = data.contents;
+            
+            // 用 DOMParser 解析（浏览器环境）
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // 移除 script 和 style
+            doc.querySelectorAll('script, style').forEach(el => el.remove());
+            
+            // 输出纯文本
+            const pureText = doc.body.innerText;
+            console.log(pureText);
+            
+            // 或者复制到剪贴板
+            navigator.clipboard.writeText(pureText).then(() => {
+              console.log('已复制到剪贴板');
+            });
+          })
+          .catch(err => console.error('抓取失败:', err));
+        
+        
+    </script>
+</head>
+
+<body>
+    hello
+</body>
+
+</html>
